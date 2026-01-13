@@ -79,69 +79,22 @@ Vercel detectará automáticamente que es un proyecto Next.js. Verifica:
 
 **¡No cambies nada!** La configuración automática es correcta.
 
-### 3.3 Configurar Variables de Entorno
+### 3.3 Configurar Base de Datos (PostgreSQL)
 
-**MUY IMPORTANTE**: Antes de desplegar, configura la base de datos:
+Como tu proyecto ya está configurado para usar PostgreSQL en el código (`schema.prisma`), **el despliegue fallará si no configuras la base de datos primero**.
 
-1. En la sección **"Environment Variables"**, agrega:
+Tienes dos opciones:
 
-```
-DATABASE_URL
-```
+**Opción A: Crear la base de datos DURANTE la creación del proyecto (Recomendado)**
+1. En la pantalla de "Import Project" de Vercel.
+2. Busca la sección de **"Storage"** o **"Integrations"** (a veces aparece después de crear, si es así, sigue la Opción B).
+3. Si no ves opción de crear base de datos aquí, continúa con el despliegue (fallará la build, es normal) y pasa al **Paso 4**.
 
-**Valor temporal** (usaremos SQLite primero):
-```
-file:./prisma/dev.db
-```
+**Opción B: Configurar después del primer intento**
+1. Haz clic en **"Deploy"**.
+2. Es probable que falle porque falta la base de datos.
+3. Ve al **Paso 4** para crearla y volver a desplegar.
 
-2. Haz clic en **"Add"**
-
-### 3.4 Desplegar
-
-1. Haz clic en **"Deploy"**
-2. Vercel comenzará a construir tu proyecto (toma 2-3 minutos)
-3. Verás el progreso en tiempo real
-4. Cuando termine, verás: **"🎉 Congratulations!"**
-
----
-
-## 🗄️ Paso 4: Configurar Base de Datos PostgreSQL
-
-### 4.1 Crear Base de Datos en Vercel
-
-1. En tu proyecto desplegado, ve a la pestaña **"Storage"**
-2. Haz clic en **"Create Database"**
-3. Selecciona **"Postgres"**
-4. Elige el nombre: `dashboard-sostenibilidad-db`
-5. Selecciona la región más cercana a tus usuarios
-6. Haz clic en **"Create"**
-
-### 4.2 Conectar Base de Datos
-
-Vercel automáticamente:
-- Creará la variable de entorno `POSTGRES_URL`
-- La conectará a tu proyecto
-- Actualizará el despliegue
-
-### 4.3 Actualizar Configuración de Prisma
-
-1. Ve a tu proyecto local
-2. Edita `prisma/schema.prisma`:
-
-```prisma
-datasource db {
-  provider = "postgresql"  // Cambiar de "sqlite" a "postgresql"
-  url      = env("POSTGRES_URL")  // Cambiar de "DATABASE_URL" a "POSTGRES_URL"
-}
-```
-
-3. Guarda y sube los cambios:
-
-```bash
-git add prisma/schema.prisma
-git commit -m "Update database to PostgreSQL"
-git push
-```
 
 Vercel detectará el cambio y redesplegará automáticamente.
 
