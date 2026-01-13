@@ -14,6 +14,8 @@ import { PerformanceTab } from './dashboard/PerformanceTab';
 import { PropertyData } from '@/types';
 import { CertificationType } from '@/generated/prisma';
 
+
+
 export default function DashboardComplete() {
   const [activeTab, setActiveTab] = useState('resumen');
   const [propertyData, setPropertyData] = useState<PropertyData | null>(null);
