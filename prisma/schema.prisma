@@ -1,0 +1,157 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  user
+  admin
+}
+
+enum CertificationType {
+  initial
+  improved
+}
+
+enum Rating {
+  A
+  B
+  C
+  D
+  E
+  F
+  G
+}
+
+enum ProcessingStatus {
+  pending
+  processing
+  completed
+  failed
+}
+
+model User {
+  id                    Int         @id @default(autoincrement())
+  email                 String      @unique
+  name                  String?
+  password              String
+  company               String?
+  role                  Role        @default(user)
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+  
+  properties            Property[]
+}
+
+model Property {
+  id                    Int                    @id @default(autoincrement())
+  userId                Int
+  name                  String
+  address               String
+  surfaceArea           Int
+  propertyType          String
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  
+  user                  User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  certifications        EnergyCertification[]
+  improvements          Improvement[]
+  consumptionRecords    EnergyConsumptionReal[]
+  climateRisk           ClimateRisk?
+  caeCertificate        CaeCertificate?
+  uploadedFiles         UploadedFile[]
+}
+
+model EnergyCertification {
+  id                    Int               @id @default(autoincrement())
+  propertyId            Int
+  certificationType     CertificationType
+  rating                Rating
+  consumptionKwhM2      Int
+  emissionsKgCo2M2      Int
+  certificationDate     DateTime
+  createdAt             DateTime          @default(now())
+  updatedAt             DateTime          @updatedAt
+  
+  property              Property          @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
+
+model Improvement {
+  id                    Int       @id @default(autoincrement())
+  propertyId            Int
+  improvementType       String
+  description           String
+  investmentAmount      Int
+  annualSavings         Int
+  implementationDate    DateTime
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  
+  property              Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
+
+model EnergyConsumptionReal {
+  id                    Int       @id @default(autoincrement())
+  propertyId            Int
+  periodStart           DateTime
+  periodEnd             DateTime
+  consumptionKwh        Int
+  costEuros             Int
+  tariffPeriod          String    // valle/llano/punta
+  sourceFile            String
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  
+  property              Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
+
+model ClimateRisk {
+  id                    Int       @id @default(autoincrement())
+  propertyId            Int       @unique
+  impliedTemperature    String
+  alignmentScenario     String
+  physicalRiskHeat      String
+  physicalRiskWater     String
+  transitionRiskCurrent Int
+  transitionRisk2030    Int
+  transitionRisk2050    Int
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  
+  property              Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
+
+model CaeCertificate {
+  id                    Int       @id @default(autoincrement())
+  propertyId            Int       @unique
+  annualSavingsKwh      Int
+  certificateValueEuros Int
+  projectionYears       Int
+  totalValueEuros       Int
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  
+  property              Property  @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
+
+model UploadedFile {
+  id                    Int              @id @default(autoincrement())
+  propertyId            Int
+  fileName              String
+  fileType              String
+  fileSize              Int
+  fileUrl               String
+  processingStatus      ProcessingStatus
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+  
+  property              Property         @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
