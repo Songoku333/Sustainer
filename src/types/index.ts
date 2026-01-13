@@ -1,5 +1,7 @@
 import { Role, CertificationType, Rating, ProcessingStatus } from "@/generated/prisma";
 
+export { Role, CertificationType, Rating, ProcessingStatus };
+
 export interface PropertyData {
     id: number;
     userId: number;
