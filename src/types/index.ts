@@ -1,6 +1,11 @@
-import { Role, CertificationType, Rating, ProcessingStatus } from "@/generated/prisma";
+import {
+    Role as _Role,
+    CertificationType as _CertificationType,
+    Rating as _Rating,
+    ProcessingStatus as _ProcessingStatus
+} from "@/generated/prisma";
 
-export { Role, CertificationType, Rating, ProcessingStatus };
+export { Role, CertificationType, Rating, ProcessingStatus } from "@/generated/prisma";
 
 export interface PropertyData {
     id: number;
@@ -22,8 +27,8 @@ export interface PropertyData {
 export interface EnergyCertification {
     id: number;
     propertyId: number;
-    certificationType: CertificationType;
-    rating: Rating;
+    certificationType: _CertificationType;
+    rating: _Rating;
     consumptionKwhM2: number;
     emissionsKgCo2M2: number;
     certificationDate: Date;
@@ -88,7 +93,7 @@ export interface UploadedFile {
     fileType: string;
     fileSize: number;
     fileUrl: string;
-    processingStatus: ProcessingStatus;
+    processingStatus: _ProcessingStatus;
     createdAt: Date;
     updatedAt: Date;
 }
