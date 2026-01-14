@@ -11,7 +11,30 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [resetLoading, setResetLoading] = useState(false);
+  const [resetMessage, setResetMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+
+  const handleResetDemo = async () => {
+    setResetLoading(true);
+    setResetMessage(null);
+    try {
+      const res = await fetch('/api/setup-demo');
+      const data = await res.json();
+      
+      if (data.success) {
+        setResetMessage({ type: 'success', text: 'Usuario demo restablecido correctamente. Intenta iniciar sesión.' });
+        // Rellenar credenciales automáticamente
+        setEmail('demo@smartrem.solutions');
+        setPassword('demo123');
+      } else {
+        setResetMessage({ type: 'error', text: 'Error al restablecer: ' + (data.error || 'Error desconocido') });
+      }
+    } catch (e) {
+      setResetMessage({ type: 'error', text: 'Error de conexión al intentar restablecer.' });
+    } finally {
+      setResetLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,6 +88,19 @@ export default function LoginPage() {
             </div>
           )}
 
+          {resetMessage && (
+            <div className={`mb-4 p-3 rounded-lg flex items-start gap-2 ${
+              resetMessage.type === 'success' ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'
+            }`}>
+              <AlertCircle className={`w-5 h-5 flex-shrink-0 mt-0.5 ${
+                resetMessage.type === 'success' ? 'text-green-600' : 'text-red-600'
+              }`} />
+              <p className={`text-sm ${
+                resetMessage.type === 'success' ? 'text-green-800' : 'text-red-800'
+              }`}>{resetMessage.text}</p>
+            </div>
+          )}
+
           {/* Credenciales Demo */}
           <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <p className="text-sm font-semibold text-blue-900 mb-2">
@@ -73,9 +109,16 @@ export default function LoginPage() {
             <p className="text-sm text-blue-800">
               Email: <span className="font-mono">demo@smartrem.solutions</span>
             </p>
-            <p className="text-sm text-blue-800">
+            <p className="text-sm text-blue-800 mb-3">
               Contraseña: <span className="font-mono">demo123</span>
             </p>
+            <button
+              onClick={handleResetDemo}
+              disabled={resetLoading}
+              className="text-xs bg-blue-100 hover:bg-blue-200 text-blue-800 px-3 py-1.5 rounded-md transition-colors border border-blue-200 font-medium"
+            >
+              {resetLoading ? 'Restableciendo...' : '🔄 Restablecer Usuario Demo'}
+            </button>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
