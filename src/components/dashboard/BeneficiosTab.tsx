@@ -43,7 +43,7 @@ export function BeneficiosTab({ propertyData }: BeneficiosTabProps) {
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="year" label={{ value: 'Años', position: 'insideBottom', offset: -5 }} />
                         <YAxis label={{ value: 'Euros (€)', angle: -90, position: 'insideLeft' }} />
-                        <Tooltip formatter={(value: number) => `${value.toLocaleString()}€`} />
+                        <Tooltip formatter={(value: number | undefined) => `${value?.toLocaleString() ?? 0}€`} />
                         <Legend />
                         <Line type="monotone" dataKey="investment" stroke="#EF4444" strokeWidth={2} name="Inversión" strokeDasharray="5 5" />
                         <Line type="monotone" dataKey="savings" stroke="#10B981" strokeWidth={2} name="Ahorros Acumulados" />

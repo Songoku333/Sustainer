@@ -11,7 +11,10 @@ import { BeneficiosTab } from './dashboard/BeneficiosTab';
 import { CAETab } from './dashboard/CAETab';
 import { RiesgosTab } from './dashboard/RiesgosTab';
 import { PerformanceTab } from './dashboard/PerformanceTab';
-import { PropertyData, CertificationType } from '@/types';
+import { PropertyData } from '@/types';
+import { CertificationType } from '@/generated/prisma';
+
+
 
 export default function DashboardComplete() {
   const [activeTab, setActiveTab] = useState('resumen');
@@ -150,8 +153,8 @@ export default function DashboardComplete() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium whitespace-nowrap transition-all ${activeTab === tab.id
-                    ? 'bg-blue-600 text-white shadow-lg scale-105'
-                    : 'bg-white text-gray-700 hover:bg-gray-100 shadow'
+                  ? 'bg-blue-600 text-white shadow-lg scale-105'
+                  : 'bg-white text-gray-700 hover:bg-gray-100 shadow'
                   }`}
               >
                 <Icon className="w-4 h-4" />

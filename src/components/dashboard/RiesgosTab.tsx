@@ -59,7 +59,7 @@ export function RiesgosTab({ propertyData }: RiesgosTabProps) {
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="year" />
                         <YAxis label={{ value: 'kgCO₂/m²', angle: -90, position: 'insideLeft' }} />
-                        <Tooltip formatter={(value: number) => `${value} kgCO₂/m²`} />
+                        <Tooltip formatter={(value: number | undefined) => `${value ?? 0} kgCO₂/m²`} />
                         <Line type="monotone" dataKey="value" stroke="#EF4444" strokeWidth={3} name="Intensidad de Carbono" />
                     </LineChart>
                 </ResponsiveContainer>

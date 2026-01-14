@@ -43,7 +43,7 @@ export function CAETab({ propertyData }: CAETabProps) {
                         <CartesianGrid strokeDasharray="3 3" />
                         <XAxis dataKey="year" label={{ value: 'Año', position: 'insideBottom', offset: -5 }} />
                         <YAxis label={{ value: 'Valor Acumulado (€)', angle: -90, position: 'insideLeft' }} />
-                        <Tooltip formatter={(value: number) => `${value.toLocaleString()}€`} />
+                        <Tooltip formatter={(value: number | undefined) => `${value?.toLocaleString() ?? 0}€`} />
                         <Area type="monotone" dataKey="value" stroke="#6366F1" fill="#6366F1" fillOpacity={0.6} name="Valor Acumulado" />
                     </AreaChart>
                 </ResponsiveContainer>
